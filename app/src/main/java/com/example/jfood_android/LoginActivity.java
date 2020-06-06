@@ -42,6 +42,7 @@ public class LoginActivity extends AppCompatActivity {
                             if(jsonResponse != null){
                                 Toast.makeText(LoginActivity.this, "Login Sucessful", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                intent.putExtra("currentUserId", jsonResponse.getInt("id"));
                                 startActivity(intent);
                                 finish();
                             }
