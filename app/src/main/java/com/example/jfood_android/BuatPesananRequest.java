@@ -9,12 +9,11 @@ import java.util.Map;
 
 public class BuatPesananRequest extends StringRequest {
 
-    private static String URLCash = "http://192.168.1.6:8080/invoice/createCashInvoice";
-    private static String URLCashless = "http://192.168.1.6:8080/invoice/createCashlessInvoice";
+    private static String URLCash = "http://192.168.1.3:8080/invoice/createCashInvoice";
+    private static String URLCashless = "http://192.168.1.3:8080/invoice/createCashlessInvoice";
     private Map<String, String> params;
-
     public BuatPesananRequest(String foodIdList, String customerId, Response.Listener<String> listener) {
-        super(Request.Method.POST, URLCash, listener, null);
+        super(Method.POST, URLCash, listener, null);
         params = new HashMap<>();
         params.put("foodIdList", foodIdList);
         params.put("customerId", customerId);
@@ -22,7 +21,7 @@ public class BuatPesananRequest extends StringRequest {
     }
 
     public BuatPesananRequest(String foodIdList, String customerId, String promoCode, Response.Listener<String> listener) {
-        super(Request.Method.POST, URLCashless, listener, null);
+        super(Method.POST, URLCashless, listener, null);
         params = new HashMap<>();
         params.put("foodIdList", foodIdList);
         params.put("customerId", customerId);

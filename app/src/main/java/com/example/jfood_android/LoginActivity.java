@@ -37,17 +37,16 @@ public class LoginActivity extends AppCompatActivity {
                 Response.Listener<String> responseListener = new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        try{
-                            JSONObject jsonResponse = new JSONObject(response);
-                            if(jsonResponse != null){
-                                Toast.makeText(LoginActivity.this, "Login Sucessful", Toast.LENGTH_SHORT).show();
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            if(jsonObject != null){
+                                Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                intent.putExtra("currentUserId", jsonResponse.getInt("id"));
+                                intent.putExtra("currentUserId", jsonObject.getInt("id"));
                                 startActivity(intent);
                                 finish();
                             }
-                        }
-                        catch (JSONException e){
+                        } catch (JSONException e) {
                             Toast.makeText(LoginActivity.this, "Login Failed", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -58,7 +57,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        tvRegister.setOnClickListener(new View.OnClickListener(){
+        tvRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);

@@ -6,7 +6,7 @@ import com.android.volley.toolbox.StringRequest;
 
 public class MenuRequest extends StringRequest {
 
-    private static final String Regis_URL = "http://192.168.1.6:8080/food";
+    private static final String Regis_URL = "http://192.168.1.3:8080/food";
 
 
     public MenuRequest(Response.Listener<String> listener) {

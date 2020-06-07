@@ -2,13 +2,16 @@ package com.example.jfood_android;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
+import android.app.AlertDialog;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -20,7 +23,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
+
+import android.os.Bundle;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,6 +40,26 @@ public class MainActivity extends AppCompatActivity {
     private int foodPriceList;
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        if (id == R.id.action_logout) {
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -44,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
         foodlist = getIntent().getExtras().getString("foodlist");
         foodPriceList = getIntent().getExtras().getInt("foodPricelist");
 
-        Log.d(TAG, "apa ini "+ foodlist);
+        Log.d(TAG, "iniiii woy "+ foodlist);
 
         refreshList();
 
@@ -107,14 +131,12 @@ public class MainActivity extends AppCompatActivity {
                         Food newFood = new Food(
                                 food.getInt("id"),
                                 food.getString("name"),
-                                newSeller,
                                 food.getInt("price"),
-                                food.getString("category")
-
+                                food.getString("category"),
+                                newSeller
                         );
 
                         foodIdList.add(newFood);
-
 
                         boolean tempStatus = true;
                         for(Seller sellerPtr : listSeller) {
@@ -122,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
                                 tempStatus = false;
                             }
                         }
-                        if(tempStatus==true){
+                        if(tempStatus){
                             listSeller.add(newSeller);
                         }
                     }
@@ -136,8 +158,10 @@ public class MainActivity extends AppCompatActivity {
                         }
                         childMapping.put(sellerPtr, tempFoodList);
                     }
+
                     listAdapter = new MainListAdapter(MainActivity.this, listSeller, childMapping);
                     expListView.setAdapter(listAdapter);
+
                 }
                 catch (JSONException e) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
@@ -149,5 +173,6 @@ public class MainActivity extends AppCompatActivity {
         MenuRequest menuRequest = new MenuRequest(responseListener);
         RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
         queue.add(menuRequest);
+
     }
 }

@@ -14,7 +14,7 @@ public class Food
 
 
 
-    public Food(int id, String name, Seller seller, int price, String category)
+    public Food(int id, String name, int price, String category, Seller seller)
     {
         this.id=id;
         this.name=name;

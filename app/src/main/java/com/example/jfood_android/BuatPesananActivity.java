@@ -1,6 +1,7 @@
 package com.example.jfood_android;
 
-import android.content.Intent;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,8 +11,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -30,16 +29,13 @@ public class BuatPesananActivity extends AppCompatActivity {
     private String foodName;
     private String foodCategory;
     private int foodPrice;
-
     private String promoCode;
     private String promoCodeRequest;
-    private int priceRequest;
-
-    private String foodList;
-    private String newFoodList;
-    private int foodPriceList;
-
     private String selectedPayment;
+    private int foodPriceList;
+    private int priceRequest;
+    private String newFoodList;
+    private String foodList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,68 +51,70 @@ public class BuatPesananActivity extends AppCompatActivity {
             foodPrice = extras.getInt("foodPrice");
         }
 
-        final EditText mPromoCode = findViewById(R.id.promo_code);
-        final TextView mCode = findViewById(R.id.textCode);
-        final TextView mFoodName = findViewById(R.id.food_name);
-        final TextView mFoodCategory = findViewById(R.id.food_category);
-        final TextView mFoodPrice = findViewById(R.id.food_price);
-        final TextView mTotalPrice = findViewById(R.id.total_price);
-        final RadioGroup mVia = findViewById(R.id.radioGroup);
-        final Button mCount = findViewById(R.id.hitung);
-        final Button mOrder = findViewById(R.id.pesan);
+        Log.d("id", String.valueOf(currentUserId));
 
+        final EditText vPromoCode = findViewById(R.id.promo_code);
+        final TextView vCode = findViewById(R.id.textCode);
+        final TextView vFoodName = findViewById(R.id.food_name);
+        final TextView vFoodCategory = findViewById(R.id.food_category);
+        final TextView vFoodPrice = findViewById(R.id.food_price);
+        final TextView vTotalPrice = findViewById(R.id.total_price);
+        final RadioGroup vVia = findViewById(R.id.radioGroup);
+        final Button vCount = findViewById(R.id.hitung);
+        final Button vOrder = findViewById(R.id.pesan);
 
-        mOrder.setVisibility(View.GONE);
-        mCode.setVisibility(View.GONE);
-        mPromoCode.setVisibility(View.GONE);
-        mCount.setEnabled(false);
+        vOrder.setVisibility(View.GONE);
+        vCode.setVisibility(View.GONE);
+        vPromoCode.setVisibility(View.GONE);
+        vCount.setEnabled(false);
 
-        mFoodName.setText(foodName);
-        mFoodCategory.setText(foodCategory);
-        mFoodPrice.setText(String.valueOf(foodPrice));
-        mTotalPrice.setText("0");
+        vFoodName.setText(foodName);
+        vFoodCategory.setText(foodCategory);
+        vFoodPrice.setText(String.valueOf(foodPrice));
+        vTotalPrice.setText("0");
 
         foodPriceList = getIntent().getExtras().getInt("foodPriceList");
         foodPriceList = foodPriceList + foodPrice;
-        Log.d("Ini harga total", foodPriceList+"");
+        Log.d("Total Harga", foodPriceList+"");
 
         foodList = getIntent().getExtras().getString("foodList");
         if(foodList == null){
             foodList = "";
         }
         newFoodList = foodList + id_food + ",";
-        Log.d("Ini mentahannn", newFoodList);
+        Log.d("Ini list food", newFoodList);
 
-        mVia.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        vVia.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                RadioButton mRadioButton = findViewById(i);
-                String selected = mRadioButton.getText().toString();
+                RadioButton vRadioButton = findViewById(i);
+                String selected = vRadioButton.getText().toString();
                 switch (selected){
                     case "Via CASH":
-                        mCode.setVisibility(View.GONE);
-                        mPromoCode.setVisibility(View.GONE);
-                        mCount.setEnabled(true);
+                        vCode.setVisibility(View.GONE);
+                        vPromoCode.setVisibility(View.GONE);
+                        vCount.setEnabled(true);
                         break;
 
                     case "Via CASHLESS":
-                        mCode.setVisibility(View.VISIBLE);
-                        mPromoCode.setVisibility(View.VISIBLE);
-                        mCount.setEnabled(true);
+                        vCode.setVisibility(View.VISIBLE);
+                        vPromoCode.setVisibility(View.VISIBLE);
+                        vCount.setEnabled(true);
                         break;
                 }
             }
         });
 
-        mCount.setOnClickListener(new View.OnClickListener() {
+        vCount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int radioId = mVia.getCheckedRadioButtonId();
+                int radioId = vVia.getCheckedRadioButtonId();
                 RadioButton radioButton = findViewById(radioId);
                 String selected = radioButton.getText().toString();
+                promoCode = vPromoCode.getText().toString();
                 switch (selected){
                     case "Via CASH":
-                        mTotalPrice.setText(String.valueOf(foodPriceList));
+                        vTotalPrice.setText(String.valueOf(foodPriceList));
                         break;
 
                     case "Via CASHLESS":
@@ -127,10 +125,10 @@ public class BuatPesananActivity extends AppCompatActivity {
                                     JSONArray jsonResponse = new JSONArray(response);
                                     for(int i = 0; i <jsonResponse.length(); i++){
                                         JSONObject promo = jsonResponse.getJSONObject(i);
-                                        if(mPromoCode.getText().toString().equals(promo.getString("code")) && promo.getBoolean("active")){
+                                        if(vPromoCode.getText().toString().equals(promo.getString("code")) && promo.getBoolean("active")){
                                             if(foodPriceList > promo.getInt("minPrice")){
                                                 priceRequest = promo.getInt("discount");
-                                                mTotalPrice.setText(String.valueOf(foodPriceList - priceRequest));
+                                                vTotalPrice.setText(String.valueOf(foodPriceList - priceRequest));
                                             }
                                         }
                                     }
@@ -148,18 +146,19 @@ public class BuatPesananActivity extends AppCompatActivity {
                         break;
                 }
 
-                mCount.setVisibility(View.GONE);
-                mOrder.setVisibility(View.VISIBLE);
+                vCount.setVisibility(View.GONE);
+                vOrder.setVisibility(View.VISIBLE);
             }
         });
 
-        mOrder.setOnClickListener(new View.OnClickListener() {
+        vOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                int radioId = mVia.getCheckedRadioButtonId();
+                int radioId = vVia.getCheckedRadioButtonId();
                 RadioButton radioButton = findViewById(radioId);
                 String selected = radioButton.getText().toString();
+                promoCode = vPromoCode.getText().toString();
                 BuatPesananRequest pesananRequest = null;
 
                 Log.d(TAG, selected);
@@ -185,15 +184,14 @@ public class BuatPesananActivity extends AppCompatActivity {
                     pesananRequest = new BuatPesananRequest(newFoodList.substring(0, newFoodList.length()-1), currentUserId+"", responseListener);
                 }
                 else if(selected.equals("Via CASHLESS")){
-                    pesananRequest = new BuatPesananRequest(newFoodList.substring(0, newFoodList.length()-1), currentUserId+"", mPromoCode.getText().toString(), responseListener);
+                    pesananRequest = new BuatPesananRequest(newFoodList.substring(0, newFoodList.length()-1), currentUserId+"", vPromoCode.getText().toString(), responseListener);
                 }
+
 
                 RequestQueue queue = Volley.newRequestQueue(BuatPesananActivity.this);
                 queue.add(pesananRequest);
 
             }
         });
-
     }
 }
-

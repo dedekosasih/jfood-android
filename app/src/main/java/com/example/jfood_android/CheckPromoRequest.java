@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class CheckPromoRequest extends StringRequest {
 
-    private static String URL = "http://192.168.1.6:8080/promo";
+    private static String URL = "http://192.168.1.3:8080/promo";
     private Map<String, String> params;
 
     public CheckPromoRequest(Response.Listener<String> listener) {

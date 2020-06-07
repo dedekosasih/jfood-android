@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class PesananFetchRequest extends StringRequest {
 
-    private static String URL = "http://192.168.1.6:8080/invoice/customer/";
+    private static String URL = "http://192.168.1.3:8080/invoice/customer/";
     private Map<String, String> params;
 
     public PesananFetchRequest(int currentUserId, Response.Listener<String> listener) {
